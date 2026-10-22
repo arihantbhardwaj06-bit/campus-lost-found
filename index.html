@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f2">
+  <title>Campus Lost &amp; Found</title>
+  <style>
+    :root { color-scheme: light; --ink:#18251f; --muted:#718078; --green:#176b4a; --line:#e5e9e3; --paper:#fff; --wash:#f5f6f2; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--wash); color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    button,input,textarea { font:inherit; }
+    .topbar { height:72px; display:flex; align-items:center; justify-content:space-between; padding:0 max(24px,calc((100vw - 1160px)/2)); background:#fff; border-bottom:1px solid var(--line); }
+    .brand { display:flex; gap:11px; align-items:center; font-weight:750; letter-spacing:-.03em; font-size:17px; }
+    .brand-mark { display:grid; place-items:center; width:36px; height:36px; background:#e8f3ed; border-radius:12px; color:var(--green); }
+    .brand-mark svg { width:20px; height:20px; }
+    .campus-label { color:var(--muted); font-size:13px; }
+    main { max-width:1160px; margin:auto; padding:54px 24px 72px; }
+    .hero { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:34px; }
+    .eyebrow { color:var(--green); font-size:12px; font-weight:750; letter-spacing:.12em; text-transform:uppercase; margin-bottom:12px; }
+    h1 { margin:0; max-width:620px; font-size:clamp(36px,5vw,54px); letter-spacing:-.055em; line-height:1.06; font-weight:740; }
+    .hero p { color:var(--muted); font-size:16px; line-height:1.6; max-width:510px; margin:16px 0 0; }
+    .hero-note { color:var(--muted); font-size:13px; white-space:nowrap; padding-bottom:4px; }
+    .layout { display:grid; grid-template-columns:minmax(0,1fr) 340px; align-items:start; gap:24px; }
+    .panel { background:var(--paper); border:1px solid var(--line); border-radius:16px; box-shadow:0 4px 16px rgba(24,37,31,.035); }
+    .feed { padding:25px; }
+    .feed-head { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:22px; }
+    h2 { margin:0; font-size:19px; letter-spacing:-.025em; }
+    .subhead { margin:6px 0 0; font-size:13px; color:var(--muted); }
+    .count { font-size:12px; color:#486257; background:#edf5f0; padding:7px 10px; border-radius:99px; white-space:nowrap; }
+    .search-wrap { position:relative; margin-bottom:17px; }
+    .search-wrap svg { position:absolute; width:18px; left:14px; top:13px; color:#819087; }
+    .search { width:100%; height:44px; padding:0 14px 0 42px; border:1px solid var(--line); border-radius:10px; outline:none; background:#fcfdfb; color:var(--ink); }
+    .search:focus,input:focus,textarea:focus { border-color:#70a88c; box-shadow:0 0 0 3px rgba(23,107,74,.1); }
+    .items { display:grid; gap:12px; }
+    .item { padding:17px 18px; border:1px solid var(--line); border-radius:12px; background:#fff; transition:border-color .15s,transform .15s; }
+    .item:hover { border-color:#c7d8cc; transform:translateY(-1px); }
+    .item-top { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .item h3 { margin:0; font-size:16px; letter-spacing:-.02em; }
+    .tag { font-size:10px; font-weight:700; color:#567463; background:#f0f5f1; border-radius:99px; padding:5px 8px; white-space:nowrap; }
+    .item p { color:#69766e; font-size:13px; line-height:1.55; margin:9px 0 13px; }
+    .item-foot { display:flex; justify-content:space-between; gap:12px; color:#78847c; font-size:11px; }
+    .location { display:flex; align-items:center; gap:5px; color:#50645a; }
+    .location svg { width:13px; height:13px; }
+    .empty { text-align:center; padding:48px 18px 52px; border:1px dashed #d8dfd8; border-radius:12px; }
+    .empty-icon { margin:0 auto 14px; width:42px; height:42px; border-radius:14px; background:#f0f4f0; display:grid; place-items:center; color:#6c8275; font-size:19px; }
+    .empty strong { display:block; font-size:14px; }
+    .empty p { color:var(--muted); font-size:13px; line-height:1.5; margin:7px 0 0; }
+    .form-panel { padding:24px; position:sticky; top:20px; }
+    .form-title { display:flex; align-items:center; gap:11px; margin-bottom:8px; }
+    .form-title .brand-mark { width:34px; height:34px; border-radius:11px; }
+    .form-intro { color:var(--muted); margin:0 0 22px; font-size:13px; line-height:1.5; }
+    label { display:block; font-size:12px; font-weight:650; margin:16px 0 7px; color:#35463d; }
+    input,textarea { display:block; width:100%; border:1px solid var(--line); border-radius:9px; padding:11px 12px; outline:none; color:var(--ink); background:#fdfefc; font-size:13px; }
+    input { height:43px; }
+    textarea { resize:vertical; min-height:92px; line-height:1.5; }
+    input::placeholder,textarea::placeholder { color:#a0aaa3; }
+    .submit { margin-top:20px; width:100%; height:45px; border:0; border-radius:9px; color:#fff; background:var(--green); font-weight:680; font-size:13px; cursor:pointer; transition:background .15s,transform .15s; }
+    .submit:hover { background:#105a3d; transform:translateY(-1px); }
+    .submit:disabled { opacity:.72; cursor:wait; }
+    .privacy { color:#8a958e; font-size:11px; text-align:center; margin:13px 0 0; line-height:1.5; }
+    .toast { position:fixed; left:50%; bottom:25px; transform:translate(-50%,16px); background:#193d2e; color:white; padding:12px 17px; border-radius:10px; box-shadow:0 8px 24px #18251f30; font-size:13px; opacity:0; pointer-events:none; transition:.2s; }
+    .toast.show { opacity:1; transform:translate(-50%,0); }
+    .toast.error { background:#7d2e26; }
+    @media (max-width:760px) { .topbar { height:64px; } .campus-label { display:none; } main { padding-top:36px; } .hero { display:block; } .hero-note { margin-top:18px; } .layout { grid-template-columns:1fr; } .form-panel { position:static; grid-row:1; } .feed { padding:20px; } }
+    @media (max-width:420px) { main { padding-left:16px; padding-right:16px; } .topbar { padding:0 16px; } .item-foot { flex-direction:column; gap:7px; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10.5 12 4l8 6.5v9a.5.5 0 0 1-.5.5h-15a.5.5 0 0 1-.5-.5z"/><path d="M9 20v-6h6v6M8 10h.01M12 10h.01M16 10h.01"/></svg></span>Campus Lost &amp; Found</div>
+    <div class="campus-label">A little help goes a long way.</div>
+  </header>
+  <main>
+    <section class="hero">
+      <div><div class="eyebrow">Your campus community board</div><h1>Lost something?<br>Let’s bring it home.</h1><p>Browse items your campus community has reported lost, or share what you’re looking for. Someone may have seen it.</p></div>
+      <div class="hero-note">✳ &nbsp;Made for our campus community</div>
+    </section>
+    <div class="layout">
+      <section class="panel feed" aria-labelledby="feed-title">
+        <div class="feed-head"><div><h2 id="feed-title">Recently reported</h2><p class="subhead">Lost items shared by students</p></div><span class="count" id="count">Loading…</span></div>
+        <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><input class="search" id="search" type="search" placeholder="Search items by name..." aria-label="Search items by name"></div>
+        <div class="items" id="items" aria-live="polite"></div>
+      </section>
+      <aside class="panel form-panel">
+        <div class="form-title"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span><h2>Report a lost item</h2></div>
+        <p class="form-intro">Add a few details to help someone recognize what you’re looking for.</p>
+        <form id="report-form">
+          <label for="name">Item name</label><input id="name" name="name" maxlength="60" placeholder="e.g. Blue water bottle" required>
+          <label for="description">Description</label><textarea id="description" name="description" maxlength="300" placeholder="Color, brand, or anything distinctive..." required></textarea>
+          <label for="location">Last seen location</label><input id="location" name="location" maxlength="80" placeholder="e.g. Student Union, 2nd floor" required>
+          <button class="submit" type="submit">Post lost item &nbsp;→</button>
+        </form>
+        <p class="privacy">Reports are shared with your campus community.</p>
+      </aside>
+    </div>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+  <script type="module">
+    const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+    const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    (() => {
+      const itemsEl = document.getElementById('items');
+      const searchEl = document.getElementById('search');
+      const countEl = document.getElementById('count');
+      const form = document.getElementById('report-form');
+      const toast = document.getElementById('toast');
+      const esc = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+      let reports = [];
+      let loading = true;
+      let loadError = '';
+      function render() {
+        const query = searchEl.value.trim().toLocaleLowerCase();
+        const shown = reports.filter(item => item.name.toLocaleLowerCase().includes(query));
+        countEl.textContent = loading ? 'Loading…' : `${shown.length} ${shown.length === 1 ? 'report' : 'reports'}`;
+        if (!shown.length) {
+          const title = loading ? 'Loading reports…' : loadError ? 'Could not load reports' : query ? 'No matching items' : 'Nothing reported yet';
+          const detail = loading ? 'Connecting to the shared campus board.' : loadError || (query ? `We couldn’t find an item named “${searchEl.value.trim()}”. Try another search.` : 'Be the first to post a lost item. Every detail helps it find its way back.');
+          itemsEl.innerHTML = `<div class="empty"><div class="empty-icon">⌕</div><strong>${title}</strong><p>${esc(detail)}</p></div>`;
+          return;
+        }
+        itemsEl.innerHTML = shown.map(item => `<article class="item"><div class="item-top"><h3>${esc(item.name)}</h3><span class="tag">LOST</span></div><p>${esc(item.description)}</p><div class="item-foot"><span class="location"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>${esc(item.location)}</span><span>${esc(new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}).format(new Date(item.created_at)))}</span></div></article>`).join('');
+      }
+      async function errorMessage(response, fallback) {
+        try {
+          const error = await response.json();
+          return typeof error.message === 'string' ? `${fallback} (${error.message})` : fallback;
+        } catch { return fallback; }
+      }
+      async function refreshReports() {
+        if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+          loading = false;
+          loadError = 'Add VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY to your local .env file, then restart Vite.';
+          render();
+          return;
+        }
+        try {
+          const response = await fetch(`${SUPABASE_URL}/rest/v1/lost_items?select=id,name,description,location,created_at&order=created_at.desc&limit=100`, { headers: { apikey: SUPABASE_PUBLISHABLE_KEY } });
+          if (!response.ok) throw new Error(await errorMessage(response, `Supabase returned HTTP ${response.status}`));
+          reports = await response.json();
+          loadError = '';
+        } catch (error) { loadError = error.message || 'Check your connection and Supabase project settings.'; }
+        loading = false;
+        render();
+      }
+      searchEl.addEventListener('input', render);
+      form.addEventListener('submit', async event => {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+        const data = new FormData(form);
+        const report = { name:data.get('name').trim(), description:data.get('description').trim(), location:data.get('location').trim() };
+        if (!report.name || !report.description || !report.location) return;
+        if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) { showToast('Configure Supabase in .env and restart Vite.', true); return; }
+        const button = form.querySelector('.submit');
+        const buttonLabel = button.innerHTML;
+        button.disabled = true;
+        button.textContent = 'Posting…';
+        try {
+          const response = await fetch(`${SUPABASE_URL}/rest/v1/lost_items`, { method:'POST', headers:{ apikey:SUPABASE_PUBLISHABLE_KEY, 'Content-Type':'application/json', Prefer:'return=representation' }, body:JSON.stringify(report) });
+          if (!response.ok) throw new Error(await errorMessage(response, `Supabase returned HTTP ${response.status}`));
+          form.reset(); searchEl.value = ''; await refreshReports(); showToast('Your lost item has been posted.');
+        } catch (error) { showToast(error.message || 'Could not post report. Check the connection and database permissions.', true); }
+        finally { button.innerHTML = buttonLabel; button.disabled = false; }
+      });
+      let toastTimer;
+      function showToast(message, isError = false) { toast.textContent = message; toast.classList.toggle('error', isError); toast.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('show'), 2600); }
+      render(); refreshReports(); setInterval(refreshReports, 30000);
+    })();
+  </script>
+</body>
+</html>
